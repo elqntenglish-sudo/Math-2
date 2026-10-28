@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Математика на каникулы: 4 дня</title>
+<style>
+:root{--bg:#fffdf7;--fg:#1d2433;--cd:#fff;--ln:#ddd6c4;--r:#d62839;--b:#1565c0;--g:#17803a;--p:#8e44ad;--k:#9a9a9a;--y:#fff4c9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--fg:#f2f2f2;--cd:#1d222d;--ln:#394050;--r:#ff7083;--b:#6db3ff;--g:#4fd16f;--p:#c792ea;--k:#7a808c;--y:#2b2a1e}}
+:root[data-theme="dark"]{--bg:#14171f;--fg:#f2f2f2;--cd:#1d222d;--ln:#394050;--r:#ff7083;--b:#6db3ff;--g:#4fd16f;--p:#c792ea;--k:#7a808c;--y:#2b2a1e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;padding:12px;background:var(--bg);color:var(--fg);font:20px/1.45 system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+h1{font-size:24px;margin:4px 0 10px}
+h2{font-size:24px;margin:6px 0}
+h3{font-size:21px;margin:0 0 8px}
+nav{display:flex;gap:8px;margin-bottom:12px}
+nav button{flex:1;font:inherit;font-weight:700;padding:10px 0;border-radius:12px;border:2px solid var(--ln);background:var(--cd);color:var(--fg)}
+nav button.on{background:var(--b);color:var(--bg);border-color:var(--b)}
+.c{background:var(--cd);border:2px solid var(--ln);border-radius:16px;padding:12px;margin:12px 0}
+.c.demo{border-color:var(--g)}
+i{font-style:normal;font-weight:700}
+.r{color:var(--r)}.b{color:var(--b)}.g{color:var(--g)}.p{color:var(--p)}
+.chip{display:inline-block;padding:2px 10px;border-radius:12px;font-weight:700;margin:2px 0}
+.chip.r{background:var(--r);color:var(--bg)}.chip.b{background:var(--b);color:var(--bg)}.chip.g{background:var(--g);color:var(--bg)}.chip.p{background:var(--p);color:var(--bg)}
+pre,.big{font:700 30px/1.2 ui-monospace,Menlo,Consolas,"Courier New",monospace}
+pre{margin:8px 0;overflow-x:auto;background:var(--y);padding:10px;border-radius:10px;width:max-content;max-width:100%}
+.big{margin:8px 0;word-break:break-all}
+s{text-decoration-thickness:4px}
+.s{margin:6px 0;font-size:18px}
+.ok{border-top:2px dashed var(--ln);padding-top:6px}
+summary{font-weight:700;padding:8px;background:var(--y);border-radius:10px}
+.warn{background:var(--y);padding:8px 10px;border-radius:10px;font-weight:700}
+label{display:block;margin-top:10px}
+.ans{font:inherit;font-weight:700;width:100%;box-sizing:border-box;padding:10px;border-radius:12px;border:2px solid var(--b);background:var(--cd);color:var(--fg);margin:6px 0}
+details[hidden]{display:none}
+.fb{font-weight:700;margin:6px 0}
+.chk{font:inherit;font-weight:700;padding:8px 16px;border-radius:12px;border:2px solid var(--g);background:var(--g);color:var(--bg)}
+@media print{nav{display:none}.day{display:block!important}}
+</style></head><body>
+<h1>🧮 Математика на каникулы</h1>
+<nav id="tabs"></nav>
+<div id="app"></div>
+<script>
+const row=n=>Array.from({length:n},()=>[' ','']);
+const put=(r,c,s,k)=>[...s].forEach((ch,i)=>{r[c+i]=[ch,k]});
+const sp=(k,t)=>`<i class="${k}">${t}</i>`;
+const grid=R=>'<pre>'+R.map(r=>r.map(([c,k])=>k?sp(k,c):c).join('')).join('\n')+'</pre>';
+
+function divide(D,d){
+ const g=[...D].map(Number),n=g.length;let i=0,cur=g[0];
+ while(cur<d&&i<n-1){i++;cur=cur*10+g[i]}
+ const st=[];let pos=i,q='';
+ for(;;){const qd=Math.floor(cur/d),pr=qd*d,rem=cur-pr;st.push({cur,qd,pr,rem,pos});q+=qd;if(pos==n-1)break;pos++;cur=rem*10+g[pos]}
+ const W=n+q.length+4,R=[];const nr=()=>{const r=row(W);R.push(r);return r};
+ const t=nr();put(t,1,D,'');put(t,1,D.slice(0,st[0].pos+1),'r');put(t,n+1,'│','k');put(t,n+2,String(d),'');
+ st.forEach((s,k)=>{
+  const e=s.pos+1,ps=String(s.pr),w=Math.max(String(s.cur).length,ps.length);
+  if(k>0){const p=st[k-1].rem,a=nr();if(p>0)put(a,e-1,String(p),'g');put(a,e,String(g[s.pos]),'p')}
+  const b=nr();put(b,e-ps.length+1,ps,'b');put(b,e-ps.length,'−','b');
+  const u=nr();put(u,e-w+1,'─'.repeat(w),'k');
+ });
+ const L=st[st.length-1],z=nr();put(z,L.pos+1,String(L.rem),'g');
+ put(R[1],n+1,'│','k');put(R[1],n+2,'─'.repeat(q.length),'k');
+ put(R[2],n+1,'│','k');put(R[2],n+2,q,'r');
+ const cap=st.map((s,k)=>`<div class="s">${sp('r','Дели')} ${s.cur}:${d}=${sp('r',s.qd)}${s.qd==0?' <small>('+s.cur+' меньше '+d+' → пиши 0)</small>':''} ${sp('b','Умножь')} ${s.qd}·${d}=${s.pr} ${sp('g','Вычти')} ${s.cur}−${s.pr}=${s.rem}${k<st.length-1?' '+sp('p','Снеси')+' '+g[s.pos+1]:''}</div>`).join('');
+ return grid(R)+cap+`<div class="s ok">Проверка: ${q}·${d}=${+q*d} ✔</div>`;
+}
+
+function mult(a,m){
+ const g=[...a].map(Number),n=g.length;let c=0,w=[],cp=Array(n+1).fill(0),cap='';
+ for(let i=n-1;i>=0;i--){
+  const pr=g[i]*m+c,x=i?pr%10:pr,nc=i?Math.floor(pr/10):0;
+  cap+=`<div class="s">${sp('b',g[i]+'·'+m+'='+g[i]*m)}${c?' + '+sp('p',c)+' = '+pr:''} → пишу ${sp('g',x)}${nc?', помню '+sp('p',nc):''}</div>`;
+  w.unshift(x);if(nc)cp[i]=nc;c=nc;
+ }
+ const R=[0,1,2,3,4].map(()=>row(n+2)),res=w.join('');
+ cp.forEach((v,i)=>{if(v)put(R[0],i,String(v),'p')});
+ put(R[1],1,a,'');put(R[2],0,'×','b');put(R[2],n,String(m),'b');put(R[3],0,'─'.repeat(n+1),'k');put(R[4],n+1-res.length,res,'g');
+ return grid(R)+cap+`<div class="s ok">Ответ: ${sp('g',+a*m)}</div>`;
+}
+
+const zd=(n,k)=>`<div class="big">${n.slice(0,-k)}<s class="r">${n.slice(-k)}</s> : 1${'0'.repeat(k)} = ${sp('g',n.slice(0,-k))}</div><div class="s">:100 → убери 2 нуля ✂️</div>`;
+const zm=(n,k)=>`<div class="big">${n} · 1${'0'.repeat(k)} = ${n}${sp('g','0'.repeat(k))}</div><div class="s">·100 → допиши 2 нуля ✍️</div>`;
+
+const L2='<p><span class="chip b">Умножь</span> → <span class="chip g">Пишу</span> + <span class="chip p">Помню</span></p>';
+const L3='<p><span class="chip r">Дели</span> → <span class="chip b">Умножь</span> → <span class="chip g">Вычти</span> → <span class="chip p">Снеси</span> ↻</p>';
+const chk='<div class="s ok">✔ Перечитал вопрос? ✔ Пересчитал последнее действие?</div>';
+
+const days=[
+['1 · Нули','<p class="warn">:100 → нули убираем ✂️<br>·100 → нули дописываем ✍️</p>',[['348 000 : 100',zd('348000',2)],['72 000 : 100',zd('72000',2)],['59 · 100',zm('59',2)]]],
+['2 · Умножение',L2,[['339 · 5',mult('339',5)],['27 · 3',mult('27',3)],['467 · 5',mult('467',5)]]],
+['3 · Деление',L3,[['21 285 : 3',divide('21285',3)],['4 036 : 2',divide('4036',2)],['6 842 : 2',divide('6842',2)]]],
+['4 · Задачи','<p class="warn">Последний шаг — пересчитай ещё раз ✔</p>',[
+ ['Периметр квадрата 36 см. Ширина прямоугольника = сторона квадрата, длина в 2 раза больше. Найди P.',
+  `<div class="s">① 36 : 4 = ${sp('g',9)} см</div><div class="s">② 9 · 2 = ${sp('g',18)} см</div><div class="s">③ (18 + 9) · 2 = 27 · 2 = ${sp('g',54)} см</div>`+chk+'<div class="s">Ответ: P = 54 см</div>'],
+ ['Мастер делает 28 деталей в час, ученик — 17. Сколько деталей они сделают вместе за 6 часов?',
+  `<div class="s">① 28 + 17 = ${sp('g',45)} в час</div><div class="s">② 45 · 6 =</div>`+mult('45',6)+chk],
+ ['Периметр квадрата 24 см. Одна сторона прямоугольника = сторона квадрата, другая в 3 раза больше. Найди P.',
+  `<div class="s">① 24 : 4 = ${sp('g',6)} см</div><div class="s">② 6 · 3 = ${sp('g',18)} см</div><div class="s">③ (18 + 6) · 2 = 24 · 2 = ${sp('g',48)} см</div>`+chk+'<div class="s">Ответ: P = 48 см</div>']
+]]
+];
+
+const task=(no,q,sol)=>`<section class="c${no==1?' demo':''}"><h3>${no==1?'👀 Смотри':'✏️ Ты'}: ${q}</h3>${no==1?sol:`<div class="s">Реши в тетради и впиши ответ:</div><input class="ans" type="text" inputmode="numeric" placeholder="Ответ" aria-label="Ответ"><button class="chk">Проверить</button><div class="fb"></div><details hidden><summary>Показать решение</summary>${sol}</details>`}<label><input type="checkbox"> Готово ⭐</label></section>`;
+document.getElementById('app').innerHTML=days.map((d,i)=>`<div class="day" id="d${i}"><h2>День ${d[0]}</h2>${d[1]}${d[2].map((t,j)=>task(j+1,t[0],t[1])).join('')}</div>`).join('');
+const tabs=document.getElementById('tabs');
+tabs.innerHTML=days.map((d,i)=>`<button data-i="${i}">${i+1}</button>`).join('');
+function show(k){document.querySelectorAll('.day').forEach((e,i)=>{e.style.display=i==k?'block':'none'});tabs.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i==k))}
+tabs.onclick=e=>{if(e.target.dataset.i!==undefined)show(+e.target.dataset.i)};
+show(0);
+document.getElementById('app').addEventListener('input',e=>{if(e.target.classList.contains('ans')){const s=e.target.parentNode;s.querySelector('details').hidden=!e.target.value.trim();s.querySelector('.fb').innerHTML=''}});
+const ANS=['720','5900','81','2335','2018','3421','270','48'];
+document.getElementById('app').addEventListener('click',e=>{if(e.target.classList.contains('chk')){const s=e.target.parentNode,a=s.querySelector('.ans'),v=a.value.replace(/\D/g,''),i=[...document.querySelectorAll('.ans')].indexOf(a);s.querySelector('.fb').innerHTML=!v?'Сначала впиши ответ':v==ANS[i]?'<i class="g">✅ Верно! Молодец!</i>':'<i class="r">🔁 Проверь ещё раз</i>'}});
+const K='math-kanikuly-v1';
+const inputs=()=>[...document.querySelectorAll('.ans')],boxes=()=>[...document.querySelectorAll('input[type=checkbox]')];
+function save(){try{const on=document.querySelector('nav .on');localStorage.setItem(K,JSON.stringify({a:inputs().map(x=>x.value),c:boxes().map(x=>x.checked),d:on?+on.textContent-1:0}))}catch(e){}}
+try{const s=JSON.parse(localStorage.getItem(K)||'null');if(s){inputs().forEach((x,i)=>{x.value=(s.a&&s.a[i])||'';x.parentNode.querySelector('details').hidden=!x.value.trim()});boxes().forEach((x,i)=>{x.checked=!!(s.c&&s.c[i])});show(s.d||0)}}catch(e){}
+const appEl=document.getElementById('app');appEl.addEventListener('input',save);appEl.addEventListener('change',save);tabs.addEventListener('click',()=>setTimeout(save,0));
+</script>
+</body></html>
